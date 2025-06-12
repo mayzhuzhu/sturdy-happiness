@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>中医VR实训系统 - 专业版</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- 核心框架 -->
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    
+    <!-- AI模块 -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.18.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet@2.2.2"></script>
+    
+    <!-- 材质包 -->
+    <script src="https://unpkg.com/aframe-environment-component@1.3.1/dist/aframe-environment-component.min.js"></script>
+    
+    <!-- 自定义样式 -->
+    <style>
+        /* 全局样式 */
+        body { margin: 0; overflow: hidden; }
+        .vr-panel {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        /* 按钮样式 */
+        .nav-btn {
+            background: #4CAF50;
+            border: none;
+            padding: 12px 24px;
+            margin: 5px;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        .nav-btn:hover { background: #45a049; transform: scale(1.05); }
+    </style>
+</head>
+<body>
+    <!-- 主场景 -->
+    <a-scene 
+        environment="preset: default; groundColor: #87CEEB"
+        background="color: #E0FFFF"
+        vr-mode-ui="enabled: false"
+    >
+        <!-- 环境光照 -->
+        <a-assets>
+            <img id="sky" src="https://cdn.aframe.io/examples/models/virtualcity/sky.jpg">
+        </a-assets>
+        <a-sky src="#sky"></a-sky>
+
+        <!-- 地面材质 -->
+        <a-plane 
+            position="0 0 -4" 
+            rotation="-90 0 0" 
+            width="20" 
+            height="20" 
+            color="#8B4513" 
+            shadow
+        ></a-plane>
+
+        <!-- 模块切换面板 -->
+        <a-entity id="ui-camera" camera look-controls>
+            <a-entity 
+                id="vr-panel" 
+                position="0 1.6 -1.8"
+                layout="type: line; spacing: 1.5"
+            >
+                <a-text value="中医VR实训系统" position="0 0.5" color="#4CAF50" align="center" width="3"></a-text>
+                
+                <!-- 模块切换按钮 -->
+                <a-entity 
+                    class="nav-btn" 
+                    geometry="primitive: plane; width: 1.2; height: 0.6"
+                    material="color: #4CAF50"
+                    text="value: 针灸训练; color: white; align: center; width: 1.1"
+                    position="0 0.8"
+                    onclick="switchModule('acupuncture')"
+                ></a-entity>
+                
+                <a-entity 
+                    class="nav-btn" 
+                    geometry="primitive: plane; width: 1.2; height: 0.6"
+                    material="color: #2196F3"
+                    text="value: 推拿训练; color: white; align: center; width: 1.1"
+                    position="0 0.3"
+                    onclick="switchModule('massage')"
+                ></a-entity>
+                
+                <a-entity 
+                    class="nav-btn" 
+                    geometry="primitive: plane; width: 1.2; height: 0.6"
+                    material="color: #FF9800"
+                    text="value: 中药辨识; color: white; align: center; width: 1.1"
+                    position="0 -0.2"
+                    onclick="switchModule('herb')"
+                ></a-entity>
+            </a-entity>
+        </a-entity>
+
+        <!-- 动态模块容器 -->
+        <a-entity id="modules-container"></a-entity>
+    </a-scene>
+
+    <!-- AI反馈面板 -->
+    <div class="vr-panel" id="feedback" style="display: none;">
+        <h3>AI实时反馈</h3>
+        <div id="ai-status">准备就绪</div>
+        <div id="score-display">得分: 0</div>
+    </div>
+
+    <!-- VSCode扩展推荐 -->
+    <div style="position: fixed; bottom: 20px; right: 20px; background: rgba(0,0,0,0.7); color: white; padding: 10px; border-radius: 5px;">
+        <strong>推荐扩展：</strong><br>
+        🌟 A-Frame Tools (VR开发辅助)<br>
+        🌟 Live Server (本地服务器)<br>
+        🌟 Prettier (代码格式化)
+    </div>
+
+
+
+    <script>
+        // 初始化模块容器
+        const modules = {
+            acupuncture: {
+                scene: `
+                    <a-entity id="acupuncture-module">
+                        <!-- 针灸穴位模型 -->
+                        <a-entity 
+                            gltf-model="https://cdn.aframe.io/examples/models/virtualcity/mesh.gltf"
+                            position="-2 1.6 -3"
+                            scale="0.1 0.1 0.1"
+                        ></a-entity>
+                        
+                        <!-- 穴位指示器 -->
+                        <a-ring 
+                            position="0 1.6 -2" 
+                            radius-inner="0.1" 
+                            radius-outer="0.15" 
+                            color="#FFD700"
+                            animation="property: rotation; to: 0 360 0; loop: true; dur: 3000"
+                        ></a-ring>
+                    </a-entity>
+                `
+            },
+            // 其他模块内容类似...
+        };
+
+        // 模块切换功能
+        function switchModule(module) {
+            const container = document.getElementById('modules-container');
+            container.innerHTML = modules[module].scene;
+            
+            // 显示AI反馈面板
+            document.getElementById('feedback').style.display = 'block';
+            document.getElementById('ai-status').textContent = `${module}模式已激活`;
+        }
+
+        // 启动时初始化
+        window.onload = () => {
+            // 初始化AI模块
+            initPoseNet().then(() => {
+                document.getElementById('ai-status').textContent = "AI姿态检测就绪";
+            });
+        };
+
+        // AI初始化代码（同前版）...
+    </script>
+</body>
+</html>
