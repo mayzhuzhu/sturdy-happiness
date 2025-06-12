@@ -1,0 +1,26 @@
+<h1>超链接</h1><hr>
+<p>作用:点击跳转到其他网页</p>
+<p>href属性是跳转地址，是超链接的必须属性</p>
+<p>输入a加回车,获得<a href=""></a>的指令</p>
+<p>上面双引号之间的输入网址,要求完整,俩a之间的">""<"的之间输入点击跳转时候的文本图片等之类</p>
+a加回车，获得<a href=""></a>指令，此指令默认在原网站直接跳转到对应网站,新开一个网站再跳转需要在""后加target="_blank"
+<p>在文段使用时a打不出来,只需要在加个空格，,在空格键前加a</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 以下为跳转到网址 -->
+    <a href="https://www.bilibili.com/">跳转到哔哩哔哩</a>
+    <!-- 以下为跳转到本地文件，方法参考路径 -->
+    <a href="./001-标签的写法.html" >跳转到001-标签的写法</a>
+    <!-- 以下为跳转到网址,新开窗口打开网址 -->
+    <a href="https://www.bilibili.com/" target="_blank">另开窗口打开哔哩哔哩</a>
+
+    <!-- 在开发初期,不知道超链接的跳转网址,href的属性值写#表示空链接，不会跳转 -->
+    <a href="#">空链接</a>
+</body>
+</html>

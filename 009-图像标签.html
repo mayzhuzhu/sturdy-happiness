@@ -1,0 +1,54 @@
+img加回车
+<img src="图片的url" alt="">嵌qian入图片
+src用于指定图像的位置和名称，是<img>的必然属性,alt暂时不学,<br>
+在src后面的双引号内打上./再打给回车可以快速选择左边资源器内的东西，需要提前把所展示的图片放在左边,直接拖动就行<hr>
+小的图片，后面可以继续加照片时候不换行，
+<hr>
+图像标签——属性<br>
+属性名=“属性值”<br>
+<img src="./图像标签.jpg" alt="">
+属性写在尖括号内，标签名后面，标签名和属性之间用空格隔开，不区分先后顺序
+重点：  属性名  作用            说明<br>
+        alt   替换文本         图片无法显示的时候显示的文字<br>
+        title 提示文本         鼠标悬停在照片上面的时候显示的文字<br>
+扩展：  width 图片的宽度        值为数字，没有单位<br>
+        height图片的高度        值为数字，没有单位<br><hr>
+
+alt是为了解决以前网速慢，图片加载不出来的问题
+
+<br>
+
+<br>
+
+<br>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <img src="./59马仁原.jpg" alt="">
+    <img src="./59马仁原（第2张）.jpg" alt="">
+</body>
+<br><br><hr>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <img src="./59马仁原1111111.jpg" alt="图片不显示，显示该文段">
+    <!-- alt是为了解决以前网速慢,图片加载不出来的问题,这段文字用了ctil加/注释的作用，具体参考002 -->
+     <img src="./59马仁原（第2张）.jpg" title="这是一段小作文"><br>
+     <br>
+     <img src="./59马仁原（第2张）.jpg" width="100">
+     <!-- 游览器默认是等比播放，所以在改宽的时候，高也会跟着变 -->
+      
+</body>
+</html>
